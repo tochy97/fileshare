@@ -1,8 +1,7 @@
 import React,{Component} from 'react';
-import {Link} from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 
-export class DisplayUser extends Component{
+export class DisplayUsers extends Component{
     constructor(){
         super();
         this.state={
@@ -25,17 +24,12 @@ export class DisplayUser extends Component{
     }
 
     render(){
-        const userData=this.state.data;
-        const row=userData.map((user)=>
-            <tr className="table-dark" key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.fname}</td>
-                <td>{user.lname}</td>
-                <td>{user.gendre}</td>
-                <td>{user.mslevel}</td>
-                <td>{user.company}</td>
-                <td>{user.email}</td>
-                <td>{user.data_added}</td>
+        const groupData=this.state.data;
+        const row=groupData.map((users)=>
+            <tr className="table-dark" key={users.id}>
+                <td>{users.id}</td>
+                <td>{users.username}</td>
+                <td>{users.data_added}</td>
             </tr>
         );
         return (
@@ -44,13 +38,8 @@ export class DisplayUser extends Component{
                     <thead>
                         <tr>
                             <th>User ID</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Gendre</th>
-                        <th>MS Level</th>
-                        <th>Company</th>
-                        <th>Email</th>
-                        <th>Date Added</th>
+                            <th>User Name</th>
+                            <th>Date Added</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -37,13 +37,7 @@ img{
     width:100%;
     height: 100%;
 }
-.loginform{
-    margin-top: 1em;
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-}
-.cuform{
+.textforms{
     margin-top: 5em;
     display:flex;
     flex-direction: column;

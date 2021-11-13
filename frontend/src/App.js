@@ -1,11 +1,11 @@
 import React from 'react';
 import {CreateUser} from './CreateUser';
+import {CreateGroup} from './CreateGroup';
 import {Login} from './Login';
-import {DisplayUser} from './DisplayUser';
+import {DisplayGroups} from './DisplayGroups';
+import {DisplayUsers} from './DisplayUsers';
 import {Navigation} from './Navigation';
 import {Footer} from './Footer';
-import {Survey} from './Survey';
-import {Hub} from './Hub';
 import './style.css'
 import './footer.css'
 import './bootstrapLux.css'
@@ -23,10 +23,10 @@ function App() {
 
         <Switch>
           <Route path='/Login' component={Login} exact/>
-          <Route path='/CreateUser' component={CreateUser}/>
-          <Route path='/DisplayUser' component={DisplayUser}/>
-          <Route path='/Hub' component={Hub} exact/>
-          <Route path='/Survey' component={Survey} exact/>
+          <Route path='/CreateUser' component={CreateUser} exact/>
+          <Route path='/CreateGroup' component={CreateGroup} exact/>
+          <Route path='/DisplayGroups' component={DisplayGroups} exact/>
+          <Route path='/DisplayUsers' component={DisplayUsers} exact/>
         </Switch>
       </div>
     </BrowserRouter>
