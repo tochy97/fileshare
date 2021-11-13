@@ -1,0 +1,141 @@
+body {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    flex-direction: column;
+    background-color: black;
+    color: #ffc727;
+}
+
+.base-container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 2em;
+    width: 30em;
+    height: 40em;
+    box-shadow: 0px 0px 12px 2px rgba(15, 15, 15, 0.2);
+    background-color: #ffc727;
+    border-radius: 10% / 50%;
+
+}
+
+.rotclogo{
+    margin-top: 3em;
+    width:17em;
+}
+
+img{
+    width:100%;
+    height: 100%;
+}
+.loginform{
+    margin-top: 1em;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+.cuform{
+    margin-top: 5em;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.textfield{
+    margin: 6px;
+    min-width: 16em;
+    height: 37px;
+    padding: 0px 10px;
+    font-size: 16px;
+    background-color: #000;
+    border:0;   
+    color:#fff;  
+    border-radius: 4px;
+    transition: all 250ms ease-in-out;
+}
+.textfield:focus{
+    margin: 6px;
+    min-width: 18em;
+    height: 37px;
+    padding: 0px 10px;
+    font-size: 16px;
+    background-color: #000;
+    border:0;   
+    color:#fff;  
+    border-radius: 4px;
+    transition: all 250ms ease-in-out;
+}
+
+.list{
+    align-items: center;
+}
+
+.form-group{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: fit-content;
+
+    
+}
+
+.button {
+    display: inline-block;
+    border-radius: 4px;
+    background-color: black;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 15px;
+    padding: 10px;
+    width: 100px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 6px;
+  }
+  
+.button:hover {
+    background-color: white;
+    color: black;
+}
+
+.dropmenu{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    min-width: 17em;
+    display: inline-block;
+    border-radius: 4px;
+    background-color: black;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 15px;
+    padding: 10px 0px;
+    width: 100px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 6px;
+    background-image:
+      linear-gradient(45deg, transparent 50%, gray 50%),
+      linear-gradient(135deg, gray 50%, transparent 50%),
+      linear-gradient(to right, #ccc, #ccc);
+    background-position:
+      calc(100% - 20px) calc(1em + 2px),
+      calc(100% - 15px) calc(1em + 2px),
+      calc(100% - 2.5em) 0.5em;
+    background-size:
+      5px 5px,
+      5px 5px,
+      1px 1.5em;
+    background-repeat: no-repeat;
+}
