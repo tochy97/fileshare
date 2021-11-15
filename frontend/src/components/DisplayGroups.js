@@ -33,8 +33,6 @@ export class DisplayGroups extends Component{
             <tr className="table-dark" key={group.id}>
                 <td>{group.id}</td>
                 <td>{group.groupname}</td>
-                <td>{group.users}</td>
-                <td>{group.admin}</td>
                 <td>{group.data_added}</td>
             </tr>
         );
@@ -45,8 +43,6 @@ export class DisplayGroups extends Component{
                         <tr>
                             <th>Group ID</th>
                             <th>Group Name</th>
-                            <th>Users (By ID)</th>
-                            <th>Admin (By ID)</th>
                             <th>Date Added</th>
                         </tr>
                     </thead>

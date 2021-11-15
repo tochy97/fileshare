@@ -17,7 +17,6 @@ class App extends Component {
       displayed_form: '',
       logged_in: localStorage.getItem('token') ? true : false,
       username: '',
-      groupdata:[],
     };
   }
 
@@ -41,7 +40,8 @@ class App extends Component {
     fetch('http://localhost:8000/token-auth/', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `JWT ${localStorage.getItem('token')}`
       },
       body: JSON.stringify(data)
     })
@@ -61,7 +61,8 @@ class App extends Component {
     fetch('http://localhost:8000/core/users/', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `JWT ${localStorage.getItem('token')}`
       },
       body: JSON.stringify(data)
     })

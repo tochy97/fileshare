@@ -1,10 +1,13 @@
 import React,{Component} from 'react';
 import { Table } from 'react-bootstrap';
 
+var temp = '';
+
 export class DisplayUsers extends Component{
     constructor(){
         super();
         this.state={
+            username: '',
             data:[]
         };
     }
@@ -23,7 +26,22 @@ export class DisplayUsers extends Component{
         });
     }
 
+    fetchUser(){
+        fetch('http://localhost:8000/core/current_user/', {
+          headers: {
+            Authorization: `JWT ${localStorage.getItem('token')}`
+          }
+        })
+          .then(res => res.json())
+          .then(json => {
+            this.setState({ username: json.username });
+          });
+          temp = this.state.username;
+          console.log(temp + 'hi' + this.state.username + 'hi');
+    }
+
     componentDidMount(){
+        this.fetchUser();
         this.fetchData();
     }
 
@@ -38,6 +56,7 @@ export class DisplayUsers extends Component{
         );
         return (
             <div >
+                hi {temp}
                 <Table className="mt-4" striped bordered hover size="sm">
                     <thead>
                         <tr>

@@ -1,8 +1,19 @@
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
-from .models import Group
+from .models import Group, Comment, File
 
+class FileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = File
+        fields = '__all__'
+
+class CommentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Comment
+        fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
 
