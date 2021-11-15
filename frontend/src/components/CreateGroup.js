@@ -6,7 +6,7 @@ export class CreateGroup extends Component{
     constructor(){
         super();
         this.state={
-            username: "",
+            groupname: "",
         }
         this.handleChange = this.handleChange.bind(this);
         this.changeHandler=this.changeHandler.bind(this);
@@ -24,7 +24,7 @@ export class CreateGroup extends Component{
     };
 
     submitForm(){
-        fetch('http://localhost:8000/groups/',{
+        fetch('http://127.0.0.1:8000/groups/',{
             method:'POST',
             body:JSON.stringify(this.state),
             headers:{
@@ -35,7 +35,7 @@ export class CreateGroup extends Component{
         .then(response=>response.json())
         .then((data)=>console.log(data));
         this.setState=({
-            username: "",
+            groupname: "",
         });
     }
 
@@ -45,7 +45,7 @@ export class CreateGroup extends Component{
                 <div className="content">
                     <form className="textforms">
                         <h4>Create Group</h4>
-                        <input type="text" onChange={this.changeHandler} className = "textfield" name="groupname" required placeholder="Group Name" value={this.state.username}/>
+                        <input type="text" onChange={this.changeHandler} className = "textfield" name="groupname" required placeholder="Group Name" value={this.state.groupname}/>
                         <button className="button" onClick={this.submitForm} >
                             Submit
                         </button>
