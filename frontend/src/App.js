@@ -3,7 +3,6 @@ import Nav from './components/Nav';
 import LoginForm from './components/LoginForm';
 import SignupForm from './components/SignupForm';
 import {UploadForm} from './components/UploadForm';
-import {Dashboard} from './components/Dashboard';
 import {DisplayGroups} from './components/DisplayGroups';
 import {CreateGroup} from './components/CreateGroup';
 import {DisplayUsers} from './components/DisplayUsers';
@@ -20,16 +19,6 @@ class App extends Component {
       username: '',
       groupdata:[],
     };
-  }
-
-  fetchGroupData(){
-      fetch('http://127.0.0.1:8000/groups/')
-      .then(response=>response.json())
-      .then((groupdata)=>{
-          this.setState({
-            groupdata:groupdata
-          });
-      });
   }
 
   componentDidMount() {
@@ -113,7 +102,7 @@ class App extends Component {
         form = <UploadForm />
         break;
         case 'viewgroup':
-          form = <DisplayGroups fetchGroupData={this.fetchGroupData}/>
+          form = <DisplayGroups/>
           break;
         case 'creategroup':
           form = <CreateGroup />

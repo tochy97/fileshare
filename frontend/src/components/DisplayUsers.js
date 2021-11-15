@@ -10,7 +10,11 @@ export class DisplayUsers extends Component{
     }
 
     fetchData(){
-        fetch('http://localhost:8000/users/')
+        fetch('http://localhost:8000/core/users/', {
+            headers: {
+              Authorization: `JWT ${localStorage.getItem('token')}`
+            }
+          })
         .then(response=>response.json())
         .then((data)=>{
             this.setState({
@@ -29,7 +33,7 @@ export class DisplayUsers extends Component{
             <tr className="table-dark" key={users.id}>
                 <td>{users.id}</td>
                 <td>{users.username}</td>
-                <td>{users.data_added}</td>
+                <td>{users.date_joined}</td>
             </tr>
         );
         return (

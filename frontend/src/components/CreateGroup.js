@@ -24,10 +24,11 @@ export class CreateGroup extends Component{
     };
 
     submitForm(){
-        fetch('http://127.0.0.1:8000/groups/',{
+        fetch('http://127.0.0.1:8000/core/groups/',{
             method:'POST',
             body:JSON.stringify(this.state),
             headers:{
+                Authorization: `JWT ${localStorage.getItem('token')}`,
                 'Content-type': 'application/json; charset=UTF-8',
         },
     })

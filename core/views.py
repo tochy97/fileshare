@@ -1,10 +1,11 @@
 from django.http import HttpResponseRedirect
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import UserSerializer, UserSerializerWithToken, GroupSerializer
+from .models import Group
 
 
 @api_view(['GET'])
@@ -23,7 +24,7 @@ class UserList(APIView):
     method here too, for retrieving a list of all User objects.
     """
 
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.AllowAny)
 
     def post(self, request, format=None):
         serializer = UserSerializerWithToken(data=request.data)
@@ -38,3 +39,10 @@ class GroupViewSet(viewsets.ModelViewSet):
         permissions.AllowAny
     ]
     serializer_class = GroupSerializer
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    permissions_classes = [ 
+        permissions.AllowAny
+    ]
+    serializer_class = UserSerializer

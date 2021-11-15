@@ -1,17 +1,30 @@
 import React,{Component} from 'react';
 import { Table } from 'react-bootstrap';
-import PropTypes from 'prop-types';
 
-export class DisplayGroups extends React.Component{
-    state = {
-        id: '',
-        groupname: '',
-        users: '',
-        admin: '',
-        data_added: '',
-    };
+export class DisplayGroups extends Component{
+    constructor(props){
+        super(props);
+        this.state={
+            data:[]
+        };
+    }
+
+    fetchData(){
+        fetch('http://127.0.0.1:8000/core/groups/', {
+            headers: {
+              Authorization: `JWT ${localStorage.getItem('token')}`
+            }
+          })
+        .then(response=>response.json())
+        .then((data)=>{
+            this.setState({
+                data:data
+            });
+        });
+    }
+
     componentDidMount(){
-        this.fetchGroupData();
+        this.fetchData();
     }
 
     render(){
@@ -41,12 +54,7 @@ export class DisplayGroups extends React.Component{
                         {row}
                     </tbody>
                 </Table>
-                <div className="content"></div>
             </div>
         )
     }
 }
-
-DisplayGroups.propTypes = {
-    fetchGroupData: PropTypes.func.isRequired
-};
