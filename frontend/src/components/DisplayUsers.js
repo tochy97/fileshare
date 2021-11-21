@@ -13,7 +13,7 @@ export class DisplayUsers extends Component{
     }
 
     fetchData(){
-        fetch('http://localhost:8000/core/users/', {
+        fetch('http://127.0.0.1:8000/core/users/', {
             headers: {
               Authorization: `JWT ${localStorage.getItem('token')}`
             }
@@ -27,7 +27,7 @@ export class DisplayUsers extends Component{
     }
 
     fetchUser(){
-        fetch('http://localhost:8000/core/current_user/', {
+        fetch('http://127.0.0.1:8000/core/current_user/', {
           headers: {
             Authorization: `JWT ${localStorage.getItem('token')}`
           }

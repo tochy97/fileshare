@@ -2,32 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Divider from '@mui/material/Divider';
 
-class LoginForm extends React.Component {
+class Signup extends React.Component {
   state = {
     username: '',
     password: ''
   };
-
-  handle_login = (e, data) => {
-    e.preventDefault();
-    fetch('http://localhost:8000/token-auth/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      .then(res => res.json())
-      .then(json => {
-        localStorage.setItem('token', json.token);
-        this.setState({
-          logged_in: true,
-          displayed_form: '',
-          username: json.user.username
-        });
-      });
-  };
-
 
   handle_change = e => {
     const name = e.target.name;
@@ -43,9 +22,9 @@ class LoginForm extends React.Component {
     return (
         <div className='base-container'>
             <div className='content'>
-                <form className='textforms' onSubmit={e => this.props.handle_login(e, this.state)}>
-                    <Divider><h1>Log In</h1></Divider>
-                    <br />
+                <form className='textforms' onSubmit={e => this.props.handle_signup(e, this.state)}>
+                    <Divider><h1>Sign Up</h1></Divider>
+                    <br/>
                     <label htmlFor="username">Username</label>
                     <input type="text" name="username" className='textfield' value={this.state.username} onChange={this.handle_change}/>
                     <label htmlFor="password">Password</label>
@@ -58,4 +37,8 @@ class LoginForm extends React.Component {
   }
 }
 
-export default LoginForm;
+export default Signup;
+
+Signup.propTypes = {
+  handle_signup: PropTypes.func.isRequired
+};

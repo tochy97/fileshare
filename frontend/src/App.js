@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Nav from './components/Nav';
-import LoginForm from './components/LoginForm';
-import SignupForm from './components/SignupForm';
-import {UploadForm} from './components/UploadForm';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import {Upload} from './components/Upload';
 import {DisplayGroups} from './components/DisplayGroups';
 import {CreateGroup} from './components/CreateGroup';
 import {DisplayUsers} from './components/DisplayUsers';
@@ -37,11 +37,10 @@ class App extends Component {
 
   handle_login = (e, data) => {
     e.preventDefault();
-    fetch('http://localhost:8000/token-auth/', {
+    fetch('http://127.0.0.1:8000/token-auth/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `JWT ${localStorage.getItem('token')}`
       },
       body: JSON.stringify(data)
     })
@@ -50,7 +49,7 @@ class App extends Component {
         localStorage.setItem('token', json.token);
         this.setState({
           logged_in: true,
-          displayed_form: <UploadForm/>,
+          displayed_form: <Upload/>,
           username: json.user.username
         });
       });
@@ -58,11 +57,10 @@ class App extends Component {
 
   handle_signup = (e, data) => {
     e.preventDefault();
-    fetch('http://localhost:8000/core/users/', {
+    fetch('http://127.0.0.1:8000/core/userlist/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `JWT ${localStorage.getItem('token')}`
       },
       body: JSON.stringify(data)
     })
@@ -71,7 +69,7 @@ class App extends Component {
         localStorage.setItem('token', json.token);
         this.setState({
           logged_in: true,
-          displayed_form: <UploadForm/>,
+          displayed_form: '',
           username: json.username
         });
       });
@@ -79,7 +77,7 @@ class App extends Component {
 
   handle_logout = () => {
     localStorage.removeItem('token');
-    this.setState({ logged_in: false, displayed_form: <LoginForm/>, username: '' });
+    this.setState({ logged_in: false, displayed_form: <Login/>, username: '' });
   };
 
   display_form = form => {
@@ -94,23 +92,23 @@ class App extends Component {
     let form;
     switch (this.state.displayed_form) {
       case 'login':
-        form = <LoginForm handle_login={this.handle_login} />;
+        form = <Login handle_login={this.handle_login} />;
         break;
       case 'signup':
-        form = <SignupForm handle_signup={this.handle_signup} />;
+        form = <Signup handle_signup={this.handle_signup} />;
         break;
       case 'upload':
-        form = <UploadForm />
+        form = <Upload />
         break;
-        case 'viewgroup':
-          form = <DisplayGroups/>
-          break;
-        case 'creategroup':
-          form = <CreateGroup />
-          break;
-        case 'viewuser':
-          form = <DisplayUsers />
-          break;
+      case 'viewgroup':
+        form = <DisplayGroups/>
+        break;
+      case 'creategroup':
+        form = <CreateGroup />
+        break;
+      case 'viewuser':
+        form = <DisplayUsers />
+        break;
       default:
         form = null;
     }

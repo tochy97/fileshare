@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Divider from '@mui/material/Divider';
 
-class SignupForm extends React.Component {
+class Login extends React.Component {
   state = {
     username: '',
     password: ''
@@ -22,9 +22,9 @@ class SignupForm extends React.Component {
     return (
         <div className='base-container'>
             <div className='content'>
-                <form className='textforms' onSubmit={e => this.props.handle_signup(e, this.state)}>
-                    <Divider><h1>Sign Up</h1></Divider>
-                    <br/>
+                <form className='textforms' onSubmit={e => this.props.handle_login(e, this.state)}>
+                    <Divider><h1>Log In</h1></Divider>
+                    <br />
                     <label htmlFor="username">Username</label>
                     <input type="text" name="username" className='textfield' value={this.state.username} onChange={this.handle_change}/>
                     <label htmlFor="password">Password</label>
@@ -37,8 +37,8 @@ class SignupForm extends React.Component {
   }
 }
 
-export default SignupForm;
+export default Login;
 
-SignupForm.propTypes = {
-  handle_signup: PropTypes.func.isRequired
+Login.propTypes = {
+  handle_login: PropTypes.func.isRequired
 };

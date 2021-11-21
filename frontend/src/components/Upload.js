@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import Divider from '@mui/material/Divider';
 
-export class UploadForm extends Component{
+export class Upload extends Component{
     constructor(props) {
       super(props);
       this.handleSubmit = this.handleSubmit.bind(this);

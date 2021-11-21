@@ -10,7 +10,7 @@ router.register('files', FileViewSet,'files')
 
 urlpatterns = [
     path('current_user/', current_user),
-    path('list_users/', UserList.as_view()),
+    path('userlist/', UserList.as_view()),
 ]
 
 urlpatterns += router.urls
