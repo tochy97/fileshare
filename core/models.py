@@ -2,19 +2,26 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Comment(models.Model):
-    user = models.ManyToManyField(User)
-    post = models.CharField(max_length=255, default="Empty")
-
-
-class File(models.Model):
-    file = models.FileField()
-    comments = models.ManyToManyField(Comment)
-    user = models.ManyToManyField(User)
-
-class Group(models.Model):
-    groupname = models.CharField(max_length=100, default=("First"))
     id = models.AutoField(primary_key = True, unique = True)
     data_added = models.DateTimeField(auto_now_add=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.CharField(max_length=255, default="_Empty_")
+
+
+class Post(models.Model):
+    id = models.AutoField(primary_key = True, unique = True)
+    data_added = models.DateTimeField(auto_now_add=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=25, default="_Empty_")
+    description = models.CharField(max_length=255, default="_Empty_")
+    file = models.FileField()
+    comments = models.ManyToManyField(Comment)
+
+class Group(models.Model):
+    groupname = models.CharField(max_length=100, default=("_Empty_"))
+    id = models.AutoField(primary_key = True, unique = True)    
+    data_added = models.DateTimeField(auto_now_add=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="User")
     users = models.ManyToManyField(User)
     admin = models.ManyToManyField(User, related_name='admin')
-    file = models.ManyToManyField(File)
+    post = models.ManyToManyField(Post)

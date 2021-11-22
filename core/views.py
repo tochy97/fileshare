@@ -4,8 +4,8 @@ from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import UserSerializer, UserSerializerWithToken, GroupSerializer, CommentSerializer, FileSerializer
-from .models import Group, Comment, File
+from .serializers import UserSerializer, UserSerializerWithToken, GroupSerializer, CommentSerializer, PostSerializer
+from .models import Group, Comment, Post
 
 
 @api_view(['GET'])
@@ -54,9 +54,9 @@ class CommentViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = CommentSerializer
 
-class FileViewSet(viewsets.ModelViewSet):
-    queryset = File.objects.all()
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
     permissions_classes = [ 
         permissions.AllowAny
     ]
-    serializer_class = FileSerializer
+    serializer_class = PostSerializer

@@ -37,7 +37,7 @@ class App extends Component {
 
   handle_login = (e, data) => {
     e.preventDefault();
-    fetch('http://127.0.0.1:8000/token-auth/', {
+    fetch('http://127.0.0.1:8000/token_auth/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ class App extends Component {
         localStorage.setItem('token', json.token);
         this.setState({
           logged_in: true,
-          displayed_form: <Upload/>,
+          displayed_form: 'upload',
           username: json.user.username
         });
       });
@@ -69,7 +69,7 @@ class App extends Component {
         localStorage.setItem('token', json.token);
         this.setState({
           logged_in: true,
-          displayed_form: '',
+          displayed_form: 'upload',
           username: json.username
         });
       });
@@ -77,7 +77,7 @@ class App extends Component {
 
   handle_logout = () => {
     localStorage.removeItem('token');
-    this.setState({ logged_in: false, displayed_form: <Login/>, username: '' });
+    this.setState({ logged_in: false, displayed_form: 'login', username: '' });
   };
 
   display_form = form => {

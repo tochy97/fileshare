@@ -87,7 +87,7 @@ REST_FRAMEWORK = {
 }   
 
 CORS_ORIGIN_WHITELIST = (
-    'https://localhost:3000',
+    'https://localhost:8080',
 )
 ROOT_URLCONF = 'backend.urls'
 CORS_ALLOW_ALL_ORIGINS = True
