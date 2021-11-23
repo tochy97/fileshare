@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import UserSerializer, UserSerializerWithToken, GroupSerializer, CommentSerializer, PostSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Group, Comment, Post
 
 
@@ -54,9 +55,19 @@ class CommentViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = CommentSerializer
 
-class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
-    permissions_classes = [ 
-        permissions.AllowAny
-    ]
-    serializer_class = PostSerializer
+class PostView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+    def get(self, request, *args, **kwargs):
+        posts = Post.objects.all()
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, *args, **kwargs):
+        posts_serializer = PostSerializer(data=request.data)
+        if posts_serializer.is_valid():
+            posts_serializer.save()
+            return Response(posts_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            print('error', posts_serializer.errors)
+            return Response(posts_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

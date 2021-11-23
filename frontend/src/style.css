@@ -3,8 +3,8 @@ body {
     width: 100%;
     min-height: 100vh;
     flex-direction: column;
-    background-color: white;
-    color: black;
+    background-color: #fff;
+    color: #000;
 }
 
 .base-container{
@@ -62,9 +62,9 @@ img{
     height: 37px;
     padding: 0px 10px;
     font-size: 16px;
-    background-color: #000;
+    background-color: #fff;
     border:0;   
-    color:#fff;  
+    color:#000;  
     border-radius: 4px;
     transition: all 250ms ease-in-out;
 }
@@ -74,9 +74,9 @@ img{
     height: 37px;
     padding: 0px 10px;
     font-size: 16px;
-    background-color: #000;
+    background-color: #fff;
     border:0;   
-    color:#fff;  
+    color:#000;  
     border-radius: 4px;
     transition: all 250ms ease-in-out;
 }
@@ -97,9 +97,9 @@ img{
 .button {
     display: inline-block;
     border-radius: 4px;
-    background-color: black;
+    background-color: #fff;
     border: none;
-    color: #FFFFFF;
+    color: #000;
     text-align: center;
     font-size: 15px;
     padding: 10px;
@@ -110,8 +110,9 @@ img{
   }
   
 .button:hover {
-    background-color: white;
-    color: black;
+    background-color: #fff;
+    color: #000;
+    width: 120px;
 }
 
 .dropmenu{
@@ -120,9 +121,9 @@ img{
     min-width: 17em;
     display: inline-block;
     border-radius: 4px;
-    background-color: black;
+    background-color: #000;
     border: none;
-    color: #FFFFFF;
+    color: #fff;
     text-align: center;
     font-size: 15px;
     padding: 10px 0px;
@@ -143,4 +144,9 @@ img{
       5px 5px,
       1px 1.5em;
     background-repeat: no-repeat;
+}
+
+.fileinput{
+    cursor: pointer;
+    margin-top: 6px;    
 }
