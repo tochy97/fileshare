@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import Nav from './components/Nav';
 import Login from './components/Login';
 import Signup from './components/Signup';
@@ -6,9 +7,9 @@ import {Upload} from './components/Upload';
 import {DisplayGroups} from './components/DisplayGroups';
 import {CreateGroup} from './components/CreateGroup';
 import {DisplayUsers} from './components/DisplayUsers';
+import {Home} from './components/Home';
 import './style.css';
 import './bootstrapLux.css';
-import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 class App extends Component {
   constructor(props) {
@@ -22,16 +23,16 @@ class App extends Component {
 
   componentDidMount() {
     if (this.state.logged_in) {
-      fetch('http://localhost:8000/core/current_user/', {
+      axios.get('http://127.0.0.1:8000/core/current_user/', {
         headers: {
-          Authorization: `JWT ${localStorage.getItem('token')}`
+          Authorization: `JWT ${localStorage.getItem('token')}`,
         }
+      }).then(user => {
+        this.state.username = user.data.username;
       })
-        .then(res => res.json())
-        .then(json => {
-          this.setState({ username: json.username });
-        });
-
+      .catch(err => 
+        console.log(err)
+      );  
     }
   }
 
@@ -52,7 +53,10 @@ class App extends Component {
           displayed_form: 'upload',
           username: json.user.username
         });
-      });
+      })
+      .catch(err => 
+        console.log(err)
+      );
   };
 
   handle_signup = (e, data) => {
@@ -72,7 +76,10 @@ class App extends Component {
           displayed_form: 'upload',
           username: json.username
         });
-      });
+      })
+      .catch(err => 
+        console.log(err)
+      );
   };
 
   handle_logout = () => {
@@ -109,6 +116,9 @@ class App extends Component {
       case 'viewuser':
         form = <DisplayUsers />
         break;
+      case 'home':
+        form = <Home />
+        break;
       default:
         form = null;
     }
@@ -116,21 +126,19 @@ class App extends Component {
 
     return (
       <div className="App">
-        <BrowserRouter>
-          <Nav
-            logged_in={this.state.logged_in}
-            display_form={this.display_form}
-            handle_logout={this.handle_logout}
-          />
-          <div className="base-container">
-            {form}
-            <h3>
-              {this.state.logged_in
-                ? `Hello ${this.state.username}`
-                : ''}
-            </h3>
-          </div>
-        </BrowserRouter>
+        <Nav
+          logged_in={this.state.logged_in}
+          display_form={this.display_form}
+          handle_logout={this.handle_logout}
+        />
+        <div className="base-container">
+          {form}
+          <h3>
+            {this.state.logged_in
+              ? `Hello ${this.state.username}`
+              : ''}
+          </h3>
+        </div>
       </div>
     );
   }

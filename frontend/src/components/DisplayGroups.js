@@ -1,30 +1,44 @@
 import React,{Component} from 'react';
+import axios from 'axios';
 import { Table } from 'react-bootstrap';
 
 export class DisplayGroups extends Component{
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={
-            data:[]
-        };
+        this.state = {
+            user: null,
+            data: [], 
+            };
+        this.fetchData = this.fetchData.bind(this);
+    }
+  
+    componentDidMount(){
+        this.fetchData();
     }
 
     fetchData(){
-        fetch('http://127.0.0.1:8000/core/groups/', {
-            headers: {
-              Authorization: `JWT ${localStorage.getItem('token')}`
-            }
-          })
-        .then(response=>response.json())
-        .then((data)=>{
-            this.setState({
-                data:data
-            });
-        });
-    }
-
-    componentDidMount(){
-        this.fetchData();
+        axios
+            .get('http://127.0.0.1:8000/core/current_user/', {
+                headers: {
+                    Authorization: `JWT ${localStorage.getItem('token')}`,
+                }
+            })
+            .then((user) => {
+        
+                this.state.user = user.data;
+                axios
+                    .get('http://127.0.0.1:8000/core/groups/', {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `JWT ${localStorage.getItem('token')}`,
+                    }
+                    })
+                    .then((groups) => {
+                
+                    this.state.data = groups.data;
+                    console.log(this.state);
+                    })  
+            })  
     }
 
     render(){

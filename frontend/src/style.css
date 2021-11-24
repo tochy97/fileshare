@@ -26,18 +26,19 @@ body {
     border-radius: 0px 0px 70px 70px;
 
 }
-.dash-content{
+
+.feed{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    width: 60em;
-    height: 35em;
+    width: 30em;
+    height: 40em;
     box-shadow: 0px 0px 12px 2px rgba(15, 15, 15, 0.2);
     background-color: #a0a0a0;
     border-radius: 0px 0px 70px 70px;
-
 }
+
 
 .rotclogo{
     margin-top: 3em;
@@ -48,7 +49,16 @@ img{
     width:100%;
     height: 100%;
 }
+
 .textforms{
+    margin-top: 5em;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.displayform{
     margin-top: 5em;
     display:flex;
     flex-direction: column;
@@ -72,6 +82,32 @@ img{
     margin: 6px;
     min-width: 18em;
     height: 37px;
+    padding: 0px 10px;
+    font-size: 16px;
+    background-color: #fff;
+    border:0;   
+    color:#000;  
+    border-radius: 4px;
+    transition: all 250ms ease-in-out;
+}
+
+.bigtextfield{
+    margin: 6px;
+    min-width: 16em;
+    height: 200px;
+    padding: 0px 10px;
+    font-size: 16px;
+    background-color: #fff;
+    border:0;   
+    color:#000;  
+    border-radius: 4px;
+    transition: all 250ms ease-in-out;
+}
+
+.bigtextfield:focus{
+    margin: 6px;
+    min-width: 18em;
+    height: 200px;
     padding: 0px 10px;
     font-size: 16px;
     background-color: #fff;

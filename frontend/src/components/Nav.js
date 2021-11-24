@@ -24,7 +24,7 @@ function Nav(props) {
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container-fluid">
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                <a className="navbar-brand"  >Home</a>
+                <a className="navbar-brand" onClick={() => props.display_form('home')} >Home</a>
                     <ul className="navbar-nav me-auto">
                         <li className="nav-item" >
                             <a className="nav-link" onClick={props.handle_logout}>Logout</a>
