@@ -1,29 +1,12 @@
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
-from .models import Group, Comment, Post
-
-class PostSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Post
-        fields = ('creator', 'title', 'description', 'file',)
-
-class CommentSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Comment
-        fields = '__all__'
+from .models import Group, Comment, Post, UserGroup
 
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = '__all__'
-        
-class GroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Group
         fields = '__all__'
 
 class UserSerializerWithToken(serializers.ModelSerializer):
@@ -50,3 +33,31 @@ class UserSerializerWithToken(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('token', 'username', 'password')  
+   
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = '__all__'
+
+class GroupPartialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ('id',)
+
+class UserGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserGroup
+        fields = '__all__'
+
+class PostSerializer(serializers.ModelSerializer):
+    creator = UserSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = Post
+        fields = ('creator', 'title', 'description', 'file',)
+
+class CommentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Comment
+        fields = '__all__'

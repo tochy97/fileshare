@@ -1,14 +1,59 @@
 import React,{Component,useState } from 'react';
 import axios from 'axios';
+import Divider from '@mui/material/Divider';
+import { Button, Card, Form } from 'react-bootstrap';
 
 export class CreateGroup extends Component{
-    state = {
-        groupname: '',
-        description: '',
-        creator: '',
-        users: '',
-        admin: '',
-      };
+      constructor(props) {
+          super(props);
+          this.state = {
+            user: null,
+            usergroup: null,
+            name: '',
+            description: '',
+            creator: '',
+            users: '',
+            admins: '',
+            error:'',
+          };
+          this.fetchData = this.fetchData.bind(this);
+      }
+    
+      componentDidMount(){
+        this.fetchData();
+      }
+    
+      fetchData(){
+        axios.get('http://127.0.0.1:8000/core/current_user/', {
+            headers: {
+              Authorization: `JWT ${localStorage.getItem('token')}`,
+            }
+        })
+        .then((user) => {
+            this.setState({ user: user.data,error: '',});
+            axios.get(`http://127.0.0.1:8000/core/usergroup/${user.data.id}/`, {
+                headers: {
+                    Authorization: `JWT ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then((ug) =>{
+                this.setState({ usergroup: ug.data,error:'',});
+            })
+            .catch((err) => {   
+                if(err.response.status==404){
+                    this.setState({ error:'Your account is not confirmed, Confrim in home page',});
+                }
+            });  
+        })
+        .catch((err) => {   
+            this.setState({ error: err.response.status,});
+            if(err.response.status==401){
+                localStorage.removeItem('token');
+                this.setState({ error:'Refresh Page',});
+            }
+        });  
+      }
 
     handleChange = (e) => {
         this.setState({
@@ -16,50 +61,52 @@ export class CreateGroup extends Component{
         })
     };
     
-    handleSubmit = e => {
+    handleSubmit = (e) => {
         e.preventDefault();
-        axios.get('http://127.0.0.1:8000/core/current_user/', {
-                headers: {
-                    Authorization: `JWT ${localStorage.getItem('token')}`
-                }
-            })
-            .then(user => {
-                this.state.creator = user.data.id;
-                this.state.users = user.data.id;
-                this.state.admin = user.data.id;
-                console.log(this.state.creator);
-                let form_data = new FormData();
-                form_data.append('groupname', this.state.groupname);
-                form_data.append('description', this.state.description);
-                form_data.append('creator', this.state.creator);
-                form_data.append('users', this.state.users);
-                form_data.append('admin', this.state.admin);
-                axios.post('http://localhost:8000/core/groups/', form_data, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                            Authorization: `JWT ${localStorage.getItem('token')}`
-                        }
-                    })
-                    .then(res => {
-                        console.log(res.data);
-                    })
-                    .catch(err => console.log(err));
-            });
+        let form_data = new FormData();
+        form_data.append('name', this.state.name);
+        form_data.append('description', this.state.description);
+        form_data.append('creator', this.state.user.id);
+        form_data.append('admins', this.state.user.id);
+        form_data.append('users', this.state.user.id);
+        axios.post('http://localhost:8000/core/groups/', form_data, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `JWT ${localStorage.getItem('token')}`
+            }
+        })
+        .then(res => {
+            this.setState({ error: '',});
+            alert("Upload Successful");
+        })
+        .catch(err => {
+            alert("Upload failed");
+        });
     };
     
     render(){
         return (
-            <div className="base-container">
-                <div className="content">
-                    <form className="textforms">
-                        <h4>Create Group</h4>
-                        <input type="text" className = "textfield" placeholder="Group Name" id="groupname" value={this.state.groupname} onChange={this.handleChange} required/>
-                            <textarea type="text" className='bigtextfield' placeholder='Description' id='description' value={this.state.description} onChange={this.handleChange} required/>
-                        <button className="button" onClick={this.handleSubmit} >
-                            Submit
-                        </button>
-                    </form>
-                </div>
+            <div className="content">
+            { this.state.error && <Alert variant="danger">{this.state.error}</Alert> }
+            { this.state.user 
+                ?
+                <Card className='p-2'>
+                    <Form onSubmit={this.handleSubmit}>
+                        <Divider><h4>Create Group</h4></Divider>
+                        <Form.Group>
+                            <Form.Control type="text" className='mt-3' placeholder="Group Name" id="name" value={this.state.name} onChange={this.handleChange} required/>
+                        </Form.Group>
+                        <Form.Group>
+                            <textarea type="text" className='form-control mt-3' placeholder='Description' id='description' value={this.state.description} onChange={this.handleChange}required/>
+                        </Form.Group>
+                        <Button type="submit" variant="dark" className='w-100 mt-3'>Submit</Button>
+                    </Form>
+                </Card>
+                :
+                    <>
+                        <h1>You are not logged in</h1>
+                    </>
+                }
             </div>
         )
     }

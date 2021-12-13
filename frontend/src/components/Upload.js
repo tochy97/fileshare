@@ -1,14 +1,41 @@
 import React,{Component} from 'react';
 import Divider from '@mui/material/Divider';
 import axios from 'axios';
+import { Button, Card, Form, Alert } from 'react-bootstrap';
 
 export class Upload extends Component{
-  state = {
-    creator: null,
-    title: '',
-    description: '',
-    file: null,
-  };
+  constructor(props) {
+      super(props);
+      this.state = {
+        user: null,
+        title: '',
+        description: '',
+        file: null,
+        error:'',
+      };
+      this.fetchData = this.fetchData.bind(this);
+  }
+
+  componentDidMount(){
+    this.fetchData();
+  }
+
+  fetchData(){
+      axios.get('http://127.0.0.1:8000/core/current_user/', {
+        headers: {
+          Authorization: `JWT ${localStorage.getItem('token')}`,
+        }
+      })
+      .then((user) => {
+        this.setState({ user: user.data,});
+      })
+      .catch((err) => {   
+        if(err.response.status==401){
+          localStorage.removeItem('token');
+          this.setState({ error:'Your account is not confirmed, Confrim in home page',});
+        }
+      });  
+  }
 
   handleChange = (e) => {
     this.setState({
@@ -22,52 +49,56 @@ export class Upload extends Component{
     })
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
-    axios
-    .get('http://127.0.0.1:8000/core/current_user/', {
+    console.log(this.state.user)
+    let form_data = new FormData();
+    form_data.append('creator', this.state.user.id);
+    form_data.append('file', this.state.file);
+    form_data.append('title', this.state.title);
+    form_data.append('description', this.state.description);
+    console.log(this.state);
+    axios.post('http://127.0.0.1:8000/core/posts/', form_data, {
       headers: {
+        'Content-Type': 'multipart/form-data',
         Authorization: `JWT ${localStorage.getItem('token')}`
       }
     })
-    .then(user => {
-        this.state.creator = user.data.id;
-        let form_data = new FormData();
-        form_data.append('creator', this.state.creator);
-        form_data.append('file', this.state.file);
-        form_data.append('title', this.state.title);
-        form_data.append('description', this.state.description);
-        console.log(this.state);
-        axios
-        .post('http://localhost:8000/core/posts/', form_data, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-              Authorization: `JWT ${localStorage.getItem('token')}`
-          }
-        })
-        .then(res => {
-          console.log(res.data);
-        })
-        .catch(err => {
-          console.log(err)
-          });
-        });
+    .then(res => {
+      alert("Upload Successful");
+      console.log(res.data);
+    })
+    .catch(err => {
+      this.setState({ error: err.response.message,});
+    });
   };
 
   
   render(){
     return (
       <div className='content'>
-        <form className='textforms' onSubmit={this.handleSubmit}>
-          <Divider><h4>Upload File</h4>  </Divider>
-          <br />
-          <label>
-            <input type="file" id='file' className='fileinput' onChange={this.handlefileChange} required/>
-          </label>
-          <input type="text" className='textfield' placeholder='Title' id='title' value={this.state.title} onChange={this.handleChange} required/>
-          <textarea type="text" className='bigtextfield' placeholder='Description' id='description' value={this.state.description} onChange={this.handleChange} required/>
-          <button type="submit" className='button'>Submit</button>
-        </form>
+      { this.state.error && <Alert variant="danger">{this.state.error}</Alert> }
+      { this.state.user 
+        ? <Card className='p-2'>
+            <Form onSubmit={this.handleSubmit}>
+              <Divider><h4>Upload File</h4>  </Divider>
+              <Form.Group>
+                <Form.Control type="file" id='file' className='fileinput' className='mt-3' onChange={this.handlefileChange} required/>
+              </Form.Group>
+              <Form.Group>
+                <Form.Control type="text" className='mt-3' placeholder='Title' id='title' value={this.state.title} onChange={this.handleChange} required/>
+              </Form.Group>
+              <Form.Group>
+                <textarea type="text" className='form-control mt-3' placeholder='Description' id='description' value={this.state.description} onChange={this.handleChange} required/>
+              </Form.Group>
+              <Button type="submit" variant="dark" className='w-100 mt-3'>Submit</Button>
+            </Form>
+          </Card>
+          :
+            <>
+              <h1>You are not logged in</h1>
+            </>
+      }
       </div>
     );
   }

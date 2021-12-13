@@ -27,9 +27,6 @@ function Nav(props) {
                 <a className="navbar-brand" onClick={() => props.display_form('home')} >Home</a>
                     <ul className="navbar-nav me-auto">
                         <li className="nav-item" >
-                            <a className="nav-link" onClick={props.handle_logout}>Logout</a>
-                        </li>
-                        <li className="nav-item" >
                             <a className="nav-link" onClick={() => props.display_form('upload')}>Upload File</a>
                         </li>
                         <li className="nav-item" >
@@ -40,6 +37,9 @@ function Nav(props) {
                         </li>
                         <li className="nav-item" >
                             <a className="nav-link" onClick={() => props.display_form('viewuser')}>View User</a>
+                        </li>
+                        <li className="nav-item" >
+                            <a className="nav-link" onClick={props.handle_logout}>Logout</a>
                         </li>
                     </ul>
             </div>

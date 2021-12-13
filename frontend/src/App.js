@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Nav from './components/Nav';
-import Login from './components/Login';
-import Signup from './components/Signup';
+import Login from './components/Auth/Login';
+import Loginerror from './components/Auth/Loginerror';
+import Signup from './components/Auth/Signup';
 import {Upload} from './components/Upload';
-import {DisplayGroups} from './components/DisplayGroups';
+import {ViewGroups} from './components/ViewGroups';
 import {CreateGroup} from './components/CreateGroup';
-import {DisplayUsers} from './components/DisplayUsers';
+import {ViewUsers} from './components/ViewUsers';
 import {Home} from './components/Home';
 import './style.css';
 import './bootstrapLux.css';
@@ -27,12 +28,16 @@ class App extends Component {
         headers: {
           Authorization: `JWT ${localStorage.getItem('token')}`,
         }
-      }).then(user => {
+      })
+      .then((user) => {
         this.state.username = user.data.username;
       })
-      .catch(err => 
-        console.log(err)
-      );  
+      .catch((err) => {   
+        if(err.response.status==401){
+          localStorage.removeItem('token');
+          this.setState({ logged_in: false, displayed_form: 'login', username: '' });
+        }
+      });  
     }
   }
 
@@ -45,18 +50,19 @@ class App extends Component {
       },
       body: JSON.stringify(data)
     })
-      .then(res => res.json())
-      .then(json => {
-        localStorage.setItem('token', json.token);
-        this.setState({
-          logged_in: true,
-          displayed_form: 'upload',
-          username: json.user.username
-        });
-      })
-      .catch(err => 
-        console.log(err)
-      );
+    .then(res => res.json())
+    .then(json => {
+      localStorage.setItem('token', json.token);
+      this.setState({
+        logged_in: true,
+        displayed_form: 'home',
+        username: json.user.username
+      });
+    })
+    .catch((err) => {
+      localStorage.removeItem('token');
+      alert("Incorrect Username of Password");
+    });
   };
 
   handle_signup = (e, data) => {
@@ -68,18 +74,18 @@ class App extends Component {
       },
       body: JSON.stringify(data)
     })
-      .then(res => res.json())
-      .then(json => {
-        localStorage.setItem('token', json.token);
-        this.setState({
-          logged_in: true,
-          displayed_form: 'upload',
-          username: json.username
-        });
-      })
-      .catch(err => 
-        console.log(err)
-      );
+    .then(res => res.json())
+    .then(json => {
+      localStorage.setItem('token', json.token);
+      this.setState({
+        logged_in: true,
+        displayed_form: 'home',
+        username: json.username
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   };
 
   handle_logout = () => {
@@ -87,7 +93,7 @@ class App extends Component {
     this.setState({ logged_in: false, displayed_form: 'login', username: '' });
   };
 
-  display_form = form => {
+  display_form = (form) => {
     this.setState({
       displayed_form: form
     });
@@ -101,6 +107,9 @@ class App extends Component {
       case 'login':
         form = <Login handle_login={this.handle_login} />;
         break;
+      case 'loginerror':
+        form = <Loginerror handle_login={this.handle_login} />;
+        break;
       case 'signup':
         form = <Signup handle_signup={this.handle_signup} />;
         break;
@@ -108,13 +117,13 @@ class App extends Component {
         form = <Upload />
         break;
       case 'viewgroup':
-        form = <DisplayGroups/>
+        form = <ViewGroups/>
         break;
       case 'creategroup':
         form = <CreateGroup />
         break;
       case 'viewuser':
-        form = <DisplayUsers />
+        form = <ViewUsers />
         break;
       case 'home':
         form = <Home />
@@ -132,11 +141,30 @@ class App extends Component {
           handle_logout={this.handle_logout}
         />
         <div className="base-container">
-          {form}
+          { 
+            this.state.logged_in
+            ?
+              <>{
+                this.state.displayed_form
+                ?
+                  <>{form}</>
+                :
+                  <Home/>
+              }</>
+              
+              :
+              <>{
+                this.state.displayed_form
+                ?
+                  <>{form}</>
+                :
+                  <Login handle_login={this.handle_login} />
+              }</>
+          }
           <h3>
             {this.state.logged_in
               ? `Hello ${this.state.username}`
-              : ''}
+              : 'Login or Signup'}
           </h3>
         </div>
       </div>

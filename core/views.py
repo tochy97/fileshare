@@ -4,26 +4,18 @@ from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import UserSerializer, UserSerializerWithToken, GroupSerializer, CommentSerializer, PostSerializer
+from .serializers import UserSerializer, UserSerializerWithToken, GroupSerializer, CommentSerializer, PostSerializer, UserGroupSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import Group, Comment, Post
-
+from .models import Group, Comment, Post, UserGroup
+from django.shortcuts import get_object_or_404
 
 @api_view(['GET'])
 def current_user(request):
-    """
-    Determine the current user by their token, and return their data
-    """
     
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
 
-
 class UserList(APIView):
-    """
-    Create a new user. It's called 'UserList' because normally we'd have a get
-    method here too, for retrieving a list of all User objects.
-    """
 
     permission_classes = (permissions.AllowAny,)
 
@@ -41,19 +33,27 @@ class GroupViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = GroupSerializer
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+class UserGroupList(APIView):
+    def get(self, request, format=None):
+        usergroup = UserGroup.objects.all()
+        serializer = UserGroupSerializer(usergroup, many=True)
+        return Response(serializer.data)
+
+class UserGroupDetail(APIView):
+    def patch(self, request, pk):
+        usergroup = UserGroup.objects.get(pk=pk)
+        serializer = UserGroupSerializer(instance=usergroup, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserGroupViewSet(viewsets.ModelViewSet):
+    queryset = UserGroup.objects.all()
     permissions_classes = [ 
         permissions.AllowAny
     ]
-    serializer_class = UserSerializer
-    
-class CommentViewSet(viewsets.ModelViewSet):
-    queryset = Comment.objects.all()
-    permissions_classes = [ 
-        permissions.AllowAny
-    ]
-    serializer_class = CommentSerializer
+    serializer_class = UserGroupSerializer
 
 class PostView(APIView):
     parser_classes = (MultiPartParser, FormParser)
@@ -71,3 +71,17 @@ class PostView(APIView):
         else:
             print('error', posts_serializer.errors)
             return Response(posts_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    permissions_classes = [ 
+        permissions.AllowAny
+    ]
+    serializer_class = CommentSerializer
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    permissions_classes = [ 
+        permissions.AllowAny
+    ]
+    serializer_class = UserSerializer
