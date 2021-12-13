@@ -96,7 +96,7 @@ export class Upload extends Component{
           </Card>
           :
             <>
-              <h1>You are not logged in</h1>
+              <Alert variant="danger">Session expired</Alert>
             </>
       }
       </div>

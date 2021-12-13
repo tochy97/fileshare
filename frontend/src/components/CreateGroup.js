@@ -1,7 +1,7 @@
 import React,{Component,useState } from 'react';
 import axios from 'axios';
 import Divider from '@mui/material/Divider';
-import { Button, Card, Form } from 'react-bootstrap';
+import { Button, Card, Form, Alert } from 'react-bootstrap';
 
 export class CreateGroup extends Component{
       constructor(props) {
@@ -104,7 +104,7 @@ export class CreateGroup extends Component{
                 </Card>
                 :
                     <>
-                        <h1>You are not logged in</h1>
+                        <Alert variant="danger">Session expired</Alert>
                     </>
                 }
             </div>

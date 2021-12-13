@@ -96,12 +96,12 @@ export class ViewGroups extends Component{
                     console.log(res.data);
                 })
                 .catch((err) => { 
-                    console.log(err);
+                    this.setState({ error: err.response.message,});
                 });
             })
         })
         .catch((err) => {
-            console.log(err);
+            this.setState({ error: err.response.message,});
         });
     }
 
@@ -140,7 +140,7 @@ export class ViewGroups extends Component{
                     </Table>
                 :
                     <>
-                        <h1>You are not logged in</h1>
+                        <Alert variant="danger">Session expired</Alert>
                     </>
             }
             </div>

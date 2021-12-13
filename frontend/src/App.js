@@ -5,9 +5,9 @@ import Login from './components/Auth/Login';
 import Loginerror from './components/Auth/Loginerror';
 import Signup from './components/Auth/Signup';
 import {Upload} from './components/Upload';
-import {ViewGroups} from './components/ViewGroups';
+import {ViewGroups} from './components/Views/ViewGroups';
 import {CreateGroup} from './components/CreateGroup';
-import {ViewUsers} from './components/ViewUsers';
+import {ViewUsers} from './components/Views/ViewUsers';
 import {Home} from './components/Home';
 import './style.css';
 import './bootstrapLux.css';
@@ -161,11 +161,6 @@ class App extends Component {
                   <Login handle_login={this.handle_login} />
               }</>
           }
-          <h3>
-            {this.state.logged_in
-              ? `Hello ${this.state.username}`
-              : 'Login or Signup'}
-          </h3>
         </div>
       </div>
     );

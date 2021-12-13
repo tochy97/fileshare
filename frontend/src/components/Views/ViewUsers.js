@@ -32,8 +32,7 @@ export class ViewUsers extends Component{
                 }
             })
             .then((user) => {
-                this.state.user = user.data;
-                console.log(this.state);
+                this.setState({user:user.data})
             })  
             .catch((err) => { 
                 this.setState({ error: err.response,});
@@ -58,7 +57,10 @@ export class ViewUsers extends Component{
             </tr>
         );
         return (
-            <div >
+            <div className="content">
+            { this.state.error && <Alert variant="danger">{this.state.error}</Alert> }
+            { this.state.user 
+                ?
                 <Table className="mt-4" striped bordered hover size="sm">
                     <thead>
                         <tr>
@@ -71,6 +73,11 @@ export class ViewUsers extends Component{
                         {row}
                     </tbody>
                 </Table>
+                :
+                    <>
+                        <Alert variant="danger">Session expired</Alert>
+                    </>
+            }
             </div>
         )
     }
