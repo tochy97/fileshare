@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
 from .models import Group, Comment, Post, UserGroup
+from rest_framework import serializers
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -35,6 +36,9 @@ class UserSerializerWithToken(serializers.ModelSerializer):
         fields = ('token', 'username', 'password')  
    
 class GroupSerializer(serializers.ModelSerializer):
+    creator = UserSerializer(many=False, read_only=True)
+    users = UserSerializer(many=True, read_only=True)
+    admins = UserSerializer(many=True, read_only=True)
     class Meta:
         model = Group
         fields = '__all__'
@@ -45,12 +49,13 @@ class GroupPartialSerializer(serializers.ModelSerializer):
         fields = ('id',)
 
 class UserGroupSerializer(serializers.ModelSerializer):
+    group = serializers.PrimaryKeyRelatedField(many=True, queryset = Group.objects.all())
     class Meta:
         model = UserGroup
         fields = '__all__'
 
 class PostSerializer(serializers.ModelSerializer):
-    creator = UserSerializer(many=False, read_only=True)
+    creator = UserSerializer(many=False, read_only=False)
 
     class Meta:
         model = Post

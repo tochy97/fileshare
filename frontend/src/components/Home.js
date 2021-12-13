@@ -42,9 +42,16 @@ export class Home extends Component{
                         console.log(this.state);
                     }) 
                     .catch((err) =>{
-                        console.log(err);
+                        this.setState({ error: err.message,});
                     })
             })  
+            .catch((err) =>{
+                this.setState({ error: err.message,});
+                if(err.response.status==401){
+                    localStorage.removeItem('token');
+                    this.setState({ error:'Refresh Page',});
+                }
+            })
     }
 
     handleConfirm = (e) => {
@@ -95,7 +102,7 @@ export class Home extends Component{
                                             <Card.Title className="mt-3" ><Divider>{item.title}</Divider></Card.Title>
                                             <Card.Subtitle className="mt-3">{item.description}</Card.Subtitle>
                                             <Card.Subtitle className="mt-3">By: {item.creator.username}</Card.Subtitle>
-                                            <Card.Img  className="mt-3 align-center" src={item.file} alt={item.title}></Card.Img>
+                                            <Card.Img  className="mt-3 align-center" src={'.'+item.file} alt={item.title}></Card.Img>
                                         </Card.Body>
                                     </Card>
                             ))

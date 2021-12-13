@@ -27,12 +27,13 @@ export class Upload extends Component{
         }
       })
       .then((user) => {
-        this.setState({ user: user.data,});
+        this.setState({ user: user.data, error:''});
       })
       .catch((err) => {   
+        this.setState({ error: err.message,});
         if(err.response.status==401){
           localStorage.removeItem('token');
-          this.setState({ error:'Your account is not confirmed, Confrim in home page',});
+          this.setState({ error:'Refresh Page',});
         }
       });  
   }
@@ -65,11 +66,11 @@ export class Upload extends Component{
       }
     })
     .then(res => {
+      this.setState({error:'',})
       alert("Upload Successful");
-      console.log(res.data);
     })
     .catch(err => {
-      this.setState({ error: err.response.message,});
+      this.setState({ error: err.message,});
     });
   };
 

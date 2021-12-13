@@ -25,7 +25,7 @@ export class ViewGroups extends Component{
             }
         })
         .then((groups) => {
-            this.setState({data:groups.data})
+            this.setState({data:groups.data, error:''})
             console.log(this.state);
             axios.get('http://127.0.0.1:8000/core/current_user/', {
                 headers: {
@@ -41,21 +41,21 @@ export class ViewGroups extends Component{
                     }
                 })
                 .then((ug) =>{
-                    this.setState({ usergroup: ug.data,});
+                    this.setState({ usergroup: ug.data, error:''});
                 })
                 .catch((err) => {   
-                    this.setState({ error: err.response.message,});
+                    this.setState({ error: err.message,});
                     if(err.response.status==404){
                         this.setState({ error:'Your account is not confirmed, Confrim in home page',});
                     }
                 });   
             }) 
             .catch((err) => {   
-                this.setState({ error: err.response.message,});
+                this.setState({ error: err.message,});
             });      
         })  
         .catch((err) => { 
-            this.setState({ error: err.response.message,});
+            this.setState({ error: err.message,});
             if(err.response.status==401){
                 localStorage.removeItem('token');
                 this.setState({ error:'Refresh Page',});
@@ -71,6 +71,7 @@ export class ViewGroups extends Component{
                 }
         })
         .then((user) => {
+            this.setState({ error: '',})
             axios.get(`http://127.0.0.1:8000/core/usergroup/${user.data.id}/`, {
                 headers: {
                     Authorization: `JWT ${localStorage.getItem('token')}`,
@@ -78,6 +79,7 @@ export class ViewGroups extends Component{
                 }
             })
             .then((usergroup) => { 
+                this.setState({ error: '',})
                 let group_data = new FormData();
                 let temp = usergroup.data.group;
                 temp.push(group.id);
@@ -86,22 +88,27 @@ export class ViewGroups extends Component{
                 for (var value of group_data.values()) {
                    console.log(value);
                 }
-                axios.patch(`http://127.0.0.1:8000/core/usergroup/${user.data.id}/`, group_data,{
+                axios.put(`http://127.0.0.1:8000/core/usergroup/${user.data.id}/`, group_data,{
                     headers: {
                         Authorization: `JWT ${localStorage.getItem('token')}`,
                         'Content-Type': 'application/json',
                     },
                 })
                 .then((res) => {
+                    this.setState({ error: '',})
                     console.log(res.data);
                 })
                 .catch((err) => { 
-                    this.setState({ error: err.response.message,});
+                    console.log(err.message);
+                    this.setState({ error: err.message,});
                 });
             })
+            .catch((err) => { 
+                this.setState({ error: err.message,});
+            });
         })
         .catch((err) => {
-            this.setState({ error: err.response.message,});
+            this.setState({ error: err.message,});
         });
     }
 

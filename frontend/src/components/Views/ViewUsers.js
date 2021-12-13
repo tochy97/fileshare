@@ -25,25 +25,25 @@ export class ViewUsers extends Component{
             }
         })
         .then((users) => {
-            this.setState({data:users.data})
+            this.setState({data:users.data, error:''})
             axios.get('http://127.0.0.1:8000/core/current_user/', {
                 headers: {
                     Authorization: `JWT ${localStorage.getItem('token')}`,
                 }
             })
             .then((user) => {
-                this.setState({user:user.data})
+                this.setState({user:user.data, error:''})
             })  
             .catch((err) => { 
-                this.setState({ error: err.response,});
-                if(err.response.status==401){
-                    localStorage.removeItem('token');
-                    this.setState({ error:'Refresh Page',});
-                }
+                this.setState({ error: err.message,});
             });
         })  
         .catch((err) => { 
-            this.setState({ error: err.response,});
+            this.setState({ error: err.message,});
+            if(err.response.status==401){
+                localStorage.removeItem('token');
+                this.setState({ error:'Refresh Page',});
+            }
         });
     }
 

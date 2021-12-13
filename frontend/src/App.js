@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Nav from './components/Nav';
+import NavComp from './components/NavComp';
 import Login from './components/Auth/Login';
-import Loginerror from './components/Auth/Loginerror';
 import Signup from './components/Auth/Signup';
 import {Upload} from './components/Upload';
 import {ViewGroups} from './components/Views/ViewGroups';
@@ -107,9 +106,6 @@ class App extends Component {
       case 'login':
         form = <Login handle_login={this.handle_login} />;
         break;
-      case 'loginerror':
-        form = <Loginerror handle_login={this.handle_login} />;
-        break;
       case 'signup':
         form = <Signup handle_signup={this.handle_signup} />;
         break;
@@ -135,7 +131,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Nav
+        <NavComp
           logged_in={this.state.logged_in}
           display_form={this.display_form}
           handle_logout={this.handle_logout}

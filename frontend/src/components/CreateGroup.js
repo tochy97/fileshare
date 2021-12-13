@@ -41,13 +41,14 @@ export class CreateGroup extends Component{
                 this.setState({ usergroup: ug.data,error:'',});
             })
             .catch((err) => {   
+                this.setState({ error: err.message,});
                 if(err.response.status==404){
                     this.setState({ error:'Your account is not confirmed, Confrim in home page',});
                 }
             });  
         })
         .catch((err) => {   
-            this.setState({ error: err.response.status,});
+            this.setState({ error: err.message,});
             if(err.response.status==401){
                 localStorage.removeItem('token');
                 this.setState({ error:'Refresh Page',});
@@ -80,7 +81,7 @@ export class CreateGroup extends Component{
             alert("Upload Successful");
         })
         .catch(err => {
-            alert("Upload failed");
+            this.setState({ error: "Upload failed"});
         });
     };
     

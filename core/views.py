@@ -40,7 +40,7 @@ class UserGroupList(APIView):
         return Response(serializer.data)
 
 class UserGroupDetail(APIView):
-    def patch(self, request, pk):
+    def put(self, request, pk):
         usergroup = UserGroup.objects.get(pk=pk)
         serializer = UserGroupSerializer(instance=usergroup, data=request.data, partial=True)
         if serializer.is_valid():
