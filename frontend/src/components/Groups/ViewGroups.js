@@ -6,8 +6,9 @@ export class ViewGroups extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            user: null,
+            user: null ,
             data: [], 
+            usergroup: null,
             error: '',
             };
         this.fetchData = this.fetchData.bind(this);
@@ -18,22 +19,25 @@ export class ViewGroups extends Component{
     }
 
     fetchData(){
-        axios.get('http://127.0.0.1:8000/core/groups/', {
+        axios.get('http://127.0.0.1:8000/core/current_user/', {
             headers: {
-                'Content-Type': 'multipart/form-data',
-                Authorization: `JWT ${localStorage.getItem('token')}`,
+              Authorization: `JWT ${localStorage.getItem('token')}`,
             }
         })
-        .then((groups) => {
-            this.setState({data:groups.data, error:''})
-            console.log(this.state);
-            axios.get('http://127.0.0.1:8000/core/current_user/', {
+        .then((user) => {
+            this.setState({ user: user.data,error: '',});
+            axios.get('http://127.0.0.1:8000/core/groups/', {
                 headers: {
+                    'Content-Type': 'multipart/form-data',
                     Authorization: `JWT ${localStorage.getItem('token')}`,
                 }
             })
-            .then((user) => {
-                this.setState({ user: user.data,});
+            .then((groups) => {
+                this.setState({
+                    data:groups.data, 
+                    error:''
+                })
+                this.setState({ user: user.data,error: '',});
                 axios.get(`http://127.0.0.1:8000/core/usergroup/${user.data.id}/`, {
                     headers: {
                         Authorization: `JWT ${localStorage.getItem('token')}`,
@@ -41,18 +45,18 @@ export class ViewGroups extends Component{
                     }
                 })
                 .then((ug) =>{
-                    this.setState({ usergroup: ug.data, error:''});
+                    this.setState({ usergroup: ug.data.group,error:'',});
                 })
                 .catch((err) => {   
                     this.setState({ error: err.message,});
                     if(err.response.status==404){
                         this.setState({ error:'Your account is not confirmed, Confrim in home page',});
                     }
-                });   
-            }) 
+                });  
+            })
             .catch((err) => {   
                 this.setState({ error: err.message,});
-            });      
+            });  
         })  
         .catch((err) => { 
             this.setState({ error: err.message,});
@@ -65,51 +69,26 @@ export class ViewGroups extends Component{
 
     handleJoin = (e, group) => {
         e.preventDefault();
-        axios.get('http://127.0.0.1:8000/core/current_user/', {
-                headers: {
-                    Authorization: `JWT ${localStorage.getItem('token')}`
-                }
+        this.setState({ error: '',})
+        let group_data = new FormData();
+        let old = this.state.usergroup;
+        old.push(old)
+        group_data.append('user',this.state.user.id)
+        group_data.append('group',old)
+        axios.put(`http://127.0.0.1:8000/core/usergroup/${this.state.user.id}/`, group_data, {
+            headers:{
+                Authorization: `JWT ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+            }
         })
-        .then((user) => {
-            this.setState({ error: '',})
-            axios.get(`http://127.0.0.1:8000/core/usergroup/${user.data.id}/`, {
-                headers: {
-                    Authorization: `JWT ${localStorage.getItem('token')}`,
-                    'Content-Type': 'application/json',
-                }
-            })
-            .then((usergroup) => { 
-                this.setState({ error: '',})
-                let group_data = new FormData();
-                let temp = usergroup.data.group;
-                temp.push(group.id);
-                group_data.append('user', user.data.id);
-                group_data.append('group', temp);
-                for (var value of group_data.values()) {
-                   console.log(value);
-                }
-                axios.put(`http://127.0.0.1:8000/core/usergroup/${user.data.id}/`, group_data,{
-                    headers: {
-                        Authorization: `JWT ${localStorage.getItem('token')}`,
-                        'Content-Type': 'application/json',
-                    },
-                })
-                .then((res) => {
-                    this.setState({ error: '',})
-                    console.log(res.data);
-                })
-                .catch((err) => { 
-                    console.log(err.message);
-                    this.setState({ error: err.message,});
-                });
-            })
-            .catch((err) => { 
-                this.setState({ error: err.message,});
-            });
+        .then((res) =>{
+            console.log(res.data)
         })
-        .catch((err) => {
-            this.setState({ error: err.message,});
-        });
+        .catch((err) =>{
+            this.setState({
+                error:err.message,
+            })
+        })
     }
 
     render(){
@@ -121,17 +100,18 @@ export class ViewGroups extends Component{
                 <td>{group.name}</td>
                 <td>{group.description}</td>
                 <td>
-                    <button value={group.id} className="button" onClick={e =>this.handleJoin(e, group)} >
+                    <Button value={group.id} className="form-control" onClick={e =>this.handleJoin(e, group)} >
                         Join
-                    </button>
+                    </Button>
                 </td>
             </tr>
         );
         return (
-            <div className="base-container">
+            <>
             { this.state.error && <Alert variant="danger">{this.state.error}</Alert> }
             { this.state.user 
                 ?
+                    <>
                     <Table className="py-2" striped bordered hover size="sm">
                         <thead>
                             <tr>
@@ -145,12 +125,13 @@ export class ViewGroups extends Component{
                             {row}
                         </tbody>
                     </Table>
+                    </>
                 :
                     <>
-                        <Alert variant="danger">Session expired</Alert>
+                        <h1>You are not logged in</h1>
                     </>
             }
-            </div>
+            </>
         )
     }
 }

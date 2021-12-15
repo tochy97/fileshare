@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import axios from 'axios';
 import { Table, Alert } from 'react-bootstrap';
 
-export class ViewUsers extends Component{
+export class ManageGroup extends Component{
     constructor(props) {
         super(props);
         this.state = {
@@ -57,7 +57,7 @@ export class ViewUsers extends Component{
             </tr>
         );
         return (
-            <div className="content">
+            <>
             { this.state.error && <Alert variant="danger">{this.state.error}</Alert> }
             { this.state.user 
                 ?
@@ -75,10 +75,10 @@ export class ViewUsers extends Component{
                 </Table>
                 :
                     <>
-                        <Alert variant="danger">Session expired</Alert>
+                        <h1>You are not logged in</h1>
                     </>
             }
-            </div>
+            </>
         )
     }
 }

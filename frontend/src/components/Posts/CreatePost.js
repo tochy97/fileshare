@@ -3,7 +3,7 @@ import Divider from '@mui/material/Divider';
 import axios from 'axios';
 import { Button, Card, Form, Alert } from 'react-bootstrap';
 
-export class Upload extends Component{
+export class CreatePost extends Component{
   constructor(props) {
       super(props);
       this.state = {
@@ -77,12 +77,13 @@ export class Upload extends Component{
   
   render(){
     return (
-      <div className='content'>
+      <>
       { this.state.error && <Alert variant="danger">{this.state.error}</Alert> }
       { this.state.user 
-        ? <Card className='p-2'>
+        ? 
+          <Card className='p-5'>
             <Form onSubmit={this.handleSubmit}>
-              <Divider><h4>Upload File</h4>  </Divider>
+              <Divider><h4>Create Post</h4>  </Divider>
               <Form.Group>
                 <Form.Control type="file" id='file' className='fileinput' className='mt-3' onChange={this.handlefileChange} required/>
               </Form.Group>
@@ -95,12 +96,12 @@ export class Upload extends Component{
               <Button type="submit" variant="dark" className='w-100 mt-3'>Submit</Button>
             </Form>
           </Card>
-          :
-            <>
-              <Alert variant="danger">Session expired</Alert>
-            </>
+        :
+          <>
+            <h1>You are not logged in</h1>
+          </>
       }
-      </div>
+      </>
     );
   }
 }

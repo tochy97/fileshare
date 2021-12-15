@@ -8,6 +8,7 @@ from .serializers import UserSerializer, UserSerializerWithToken, GroupSerialize
 from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Group, Comment, Post, UserGroup
 from django.shortcuts import get_object_or_404
+from rest_framework import serializers
 
 @api_view(['GET'])
 def current_user(request):
@@ -42,11 +43,17 @@ class UserGroupList(APIView):
 class UserGroupDetail(APIView):
     def put(self, request, pk):
         usergroup = UserGroup.objects.get(pk=pk)
+        group_data = request.data.pop('group')
+        for group_data in group_data:
+            group_obj = Group.objects.get(id=group_data('id'))
+            usergroup.group.add(group_obj)
         serializer = UserGroupSerializer(instance=usergroup, data=request.data, partial=True)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 
 class UserGroupViewSet(viewsets.ModelViewSet):
     queryset = UserGroup.objects.all()

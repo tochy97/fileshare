@@ -46,7 +46,7 @@ class GroupSerializer(serializers.ModelSerializer):
 class GroupPartialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ('id',)
+        fields = ('id','name','description')
 
 class UserGroupSerializer(serializers.ModelSerializer):
     group = serializers.PrimaryKeyRelatedField(many=True, queryset = Group.objects.all())

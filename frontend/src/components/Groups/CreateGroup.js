@@ -39,6 +39,7 @@ export class CreateGroup extends Component{
             })
             .then((ug) =>{
                 this.setState({ usergroup: ug.data,error:'',});
+                console.log(this.state)
             })
             .catch((err) => {   
                 this.setState({ error: err.message,});
@@ -87,11 +88,11 @@ export class CreateGroup extends Component{
     
     render(){
         return (
-            <div className="content">
+            <>
             { this.state.error && <Alert variant="danger">{this.state.error}</Alert> }
-            { this.state.user 
-                ?
-                <Card className='p-2'>
+            { this.state.user         
+                ? 
+                    <Card className='p-5'>
                     <Form onSubmit={this.handleSubmit}>
                         <Divider><h4>Create Group</h4></Divider>
                         <Form.Group>
@@ -105,10 +106,10 @@ export class CreateGroup extends Component{
                 </Card>
                 :
                     <>
-                        <Alert variant="danger">Session expired</Alert>
+                        <h1>You are not logged in</h1>
                     </>
                 }
-            </div>
+            </>
         )
     }
 

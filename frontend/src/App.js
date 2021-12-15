@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import NavComp from './components/NavComp';
+import NavComp from './components/NavComp/NavComp';
 import Login from './components/Auth/Login';
 import Signup from './components/Auth/Signup';
-import {Upload} from './components/Upload';
-import {ViewGroups} from './components/Views/ViewGroups';
-import {CreateGroup} from './components/CreateGroup';
-import {ViewUsers} from './components/Views/ViewUsers';
+import {CreatePost} from './components/Posts/CreatePost';
+import {ManagePost} from './components/Posts/ManagePost';
+import {ViewGroups} from './components/Groups/ViewGroups';
+import {CreateGroup} from './components/Groups/CreateGroup';
+import {ManageGroup} from './components/Groups/ManageGroup';
 import {Home} from './components/Home';
 import './style.css';
 import './bootstrapLux.css';
@@ -109,17 +110,20 @@ class App extends Component {
       case 'signup':
         form = <Signup handle_signup={this.handle_signup} />;
         break;
-      case 'upload':
-        form = <Upload />
+      case 'createpost':
+        form = <CreatePost />
         break;
-      case 'viewgroup':
-        form = <ViewGroups/>
+      case 'createpost':
+        form = <CreatePost />
+        break;
+      case 'managepost':
+        form = <ManagePost/>
         break;
       case 'creategroup':
         form = <CreateGroup />
         break;
-      case 'viewuser':
-        form = <ViewUsers />
+      case 'managegroup':
+        form = <ManageGroup />
         break;
       case 'home':
         form = <Home />
@@ -135,6 +139,7 @@ class App extends Component {
           logged_in={this.state.logged_in}
           display_form={this.display_form}
           handle_logout={this.handle_logout}
+          username={this.state.username}
         />
         <div className="base-container">
           { 
